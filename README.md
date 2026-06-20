@@ -133,25 +133,30 @@ I also used `NULLIF()` in every division in the project. Early on I ran into div
 
 ---
 
-## The dashboard
+## The DASHBOARD Overview
 
 SQL gives the right numbers, but a dashboard makes those numbers usable for someone who isn't going to read a query. Here's what it has:
 
-![Dashboard overview](screenshots/dashboard_overview.png)
+<img width="1847" height="612" alt="dashboard_overview" src="https://github.com/user-attachments/assets/c7be7121-128b-4eb9-a5db-8b38c4167cf9" />
+
 
 **Three slicers — Season, Role, and Name.** These are connected, so picking "All-Rounder" in the Role slicer automatically updates the Name slicer to only show all-rounder names. Both charts on the dashboard update at the same time when you change any slicer.
 
-![Filtered to All-Rounders](screenshots/filtered_view_allrounders.png)
+<img width="1852" height="612" alt="filtered_view_allrounders" src="https://github.com/user-attachments/assets/846e6105-489f-48ce-81d0-244f12b1d529" />
 
-**A bar chart** ranking players by their value-for-money score, highest at the top. Switching the role filter to "Bowler" shows Deepak Nair clearly at the top — which matches the data, since he had the best value-for-money score in the whole dataset, in both seasons.
+
+**A bar chart** ranking players by their value-for-money score according to season(2022 above and 2023 below), highest at the top. Switching the role filter to "Bowler" shows Deepak Nair clearly at the top — which matches the data, since he had the best value-for-money score in the whole dataset, in both seasons.
+
+<img width="642" height="485" alt="image" src="https://github.com/user-attachments/assets/88c694c9-7dfc-495b-a9e0-1a01c19ae268" />
 
 **A bubble chart** plotting price paid against performance rating, with bubble size showing value. Hovering over any bubble shows a small box with that player's full details — name, price, rating, role, and VFM score. Good value players cluster toward the top-left (high rating, low price), overpriced players cluster toward the bottom-right.
 
-![Bubble chart tooltip](screenshots/bubble_chart_drilldown.png)
+<img width="1852" height="622" alt="bubble_chart_drilldown" src="https://github.com/user-attachments/assets/fb92aeda-feb1-4062-8e76-149add7fb084" />
 
 **A rankings table** showing the full leaderboard for whichever role and season is selected, sorted by rank — similar to how a sports ranking page would look.
 
-![Player rankings table](screenshots/player_rankings_table.png)
+<img width="1847" height="533" alt="player_rankings_table" src="https://github.com/user-attachments/assets/9724dbde-4d0f-4c63-a10a-93f9d425e5a9" />
+
 
 ---
 
@@ -165,7 +170,7 @@ On the other side, Marco de Bruyn was bought for ₹9-11 Cr in both seasons but 
 
 ## Tech I used
 
-`MySQL` · `Google Sheets` · Window Functions · Views · PivotTables · Slicers
+MySQL · Google Sheets · Window Functions · Views · PivotTables 
 
 ---
 
@@ -175,4 +180,3 @@ Player names, prices, and stats in this project are made up — I built them to 
 
 ---
 
-*This was a self-taught project to practice SQL window functions, writing clean reusable views, and building a dashboard that's actually easy to use.*
