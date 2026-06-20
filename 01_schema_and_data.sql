@@ -1,0 +1,167 @@
+create schema IPL;
+use IPL;
+create table players(
+player_id INT PRIMARY KEY,
+player_name VARCHAR(100),
+player_role VARCHAR(50),
+team VARCHAR(50),
+nationality VARCHAR (50));
+CREATE TABLE auction (
+  auction_id     INT AUTO_INCREMENT PRIMARY KEY,
+  player_id      INT,
+  season         ENUM('2022', '2023', '2024', '2025') NOT NULL,
+  base_price_cr  DECIMAL(5,2),
+  sold_price_cr  DECIMAL(5,2),
+  FOREIGN KEY (player_id) REFERENCES players(player_id)
+);
+CREATE TABLE batting_stats (
+  stat_id     INT AUTO_INCREMENT PRIMARY KEY,
+  player_id   INT NOT NULL,
+  season      ENUM('2022', '2023', '2024', '2025') NOT NULL,
+  matches     INT NOT NULL,
+  runs        INT NOT NULL,
+  balls_faced INT NOT NULL,
+  fours       INT NOT NULL,
+  sixes       INT NOT NULL,
+  fifties     INT NOT NULL,
+  hundreds    INT NOT NULL,
+  FOREIGN KEY (player_id) REFERENCES players(player_id)
+);
+
+CREATE TABLE bowling_stats (
+  stat_id    INT AUTO_INCREMENT PRIMARY KEY,
+  player_id  INT NOT NULL,
+  season     ENUM('2022', '2023', '2024', '2025') NOT NULL,
+  matches    INT NOT NULL,
+  wickets    INT NOT NULL,
+  runs_given INT NOT NULL,
+  overs      DECIMAL(6,1) NOT NULL,
+  dot_balls  INT NOT NULL,
+  FOREIGN KEY (player_id) REFERENCES players(player_id)
+);
+
+
+-- ── PLAYERS ──────────────────────────────────────────────────────────────
+INSERT INTO players VALUES
+(1,  'Raj Sharma',     'Batsman',     'Mumbai Lions',     'Indian'),
+(2,  'Arjun Patel',    'All-Rounder', 'Chennai Tigers',   'Indian'),
+(3,  'Chris Blake',    'Batsman',     'Delhi Dynamos',    'West Indian'),
+(4,  'Priya Singh',    'Bowler',      'Kolkata Knights',  'Indian'),
+(5,  'Nathan Ford',    'Bowler',      'Punjab Royals',    'Australian'),
+(6,  'Kiran Mehta',    'Batsman',     'Mumbai Lions',     'Indian'),
+(7,  'James Tanner',   'All-Rounder', 'Rajasthan Riders', 'English'),
+(8,  'Suresh Rao',     'Bowler',      'Chennai Tigers',   'Indian'),
+(9,  'Vikram Das',     'Batsman',     'Hyderabad Hawks',  'Indian'),
+(10, 'Luca Ferreira',  'All-Rounder', 'Delhi Dynamos',    'South African'),
+(11, 'Ankit Verma',    'Batsman',     'Kolkata Knights',  'Indian'),
+(12, 'Brendon Chase',  'Bowler',      'Punjab Royals',    'New Zealander'),
+(13, 'Rohan Gill',     'All-Rounder', 'Mumbai Lions',     'Indian'),
+(14, 'Tom Sullivan',   'Batsman',     'Rajasthan Riders', 'Australian'),
+(15, 'Deepak Nair',    'Bowler',      'Hyderabad Hawks',  'Indian'),
+(16, 'Sanjay Kumar',   'Batsman',     'Chennai Tigers',   'Indian'),
+(17, 'Marco de Bruyn', 'All-Rounder', 'Kolkata Knights',  'South African'),
+(18, 'Praveen Joshi',  'Bowler',      'Mumbai Lions',     'Indian'),
+(19, 'Hamid Shaikh',   'Batsman',     'Delhi Dynamos',    'Indian'),
+(20, 'Carlos Mendez',  'All-Rounder', 'Punjab Royals',    'West Indian');
+-- ── AUCTION ───────────────────────────────────────────────────────────────
+INSERT INTO auction (player_id, season, base_price_cr, sold_price_cr) VALUES
+(1,  '2022', 2.00, 14.00),
+(1,  '2023', 2.00, 16.50),
+(2,  '2022', 2.00, 15.25),
+(2,  '2023', 2.00, 17.00),
+(3,  '2022', 1.00,  6.50),
+(3,  '2023', 1.00,  9.00),
+(4,  '2022', 0.50,  1.20),
+(4,  '2023', 0.50,  2.00),
+(5,  '2022', 1.00,  9.00),
+(5,  '2023', 1.00,  7.50),
+(6,  '2022', 0.50,  3.50),
+(6,  '2023', 0.50,  4.00),
+(7,  '2022', 1.50, 11.00),
+(7,  '2023', 1.50, 13.50),
+(8,  '2022', 0.50,  1.80),
+(8,  '2023', 0.50,  2.50),
+(9,  '2022', 1.00,  5.50),
+(9,  '2023', 1.00,  6.00),
+(10, '2022', 2.00, 10.00),
+(10, '2023', 2.00, 12.00),
+(11, '2022', 0.50,  2.00),
+(11, '2023', 0.50,  3.50),
+(12, '2022', 1.00,  4.50),
+(12, '2023', 1.00,  6.50),
+(13, '2022', 1.00,  8.00),
+(13, '2023', 1.00,  9.50),
+(14, '2022', 1.50,  7.00),
+(14, '2023', 1.50,  8.00),
+(15, '2022', 0.50,  1.50),
+(15, '2023', 0.50,  1.80),
+(16, '2022', 0.50,  2.50),
+(16, '2023', 0.50,  4.00),
+(17, '2022', 2.00,  9.00),
+(17, '2023', 2.00, 11.00),
+(18, '2022', 0.50,  1.00),
+(18, '2023', 0.50,  1.20),
+(19, '2022', 0.50,  3.00),
+(19, '2023', 0.50,  3.50),
+(20, '2022', 1.50,  8.50),
+(20, '2023', 1.50, 10.00);
+-- ── BATTING STATS ─────────────────────────────────────────────────────────
+-- (Batsmen + All-Rounders only — pure Bowlers have no batting rows)
+-- player_id, season, matches, runs, balls_faced, fours, sixes, fifties, hundreds
+INSERT INTO batting_stats (player_id, season, matches, runs, balls_faced, fours, sixes, fifties, hundreds) VALUES
+(1,  '2022', 14, 480, 380, 42, 18, 4, 1),
+(1,  '2023', 14, 520, 400, 46, 20, 5, 1),
+(2,  '2022', 14, 310, 240, 28, 14, 3, 0),
+(2,  '2023', 14, 340, 260, 30, 16, 3, 0),
+(3,  '2022', 12, 520, 330, 55, 30, 4, 2),
+(3,  '2023', 14, 610, 370, 62, 35, 5, 2),
+(6,  '2022', 13, 390, 310, 36, 12, 3, 1),
+(6,  '2023', 14, 420, 330, 38, 15, 4, 1),
+(7,  '2022', 14, 280, 220, 24, 10, 2, 0),
+(7,  '2023', 14, 310, 235, 27, 12, 3, 0),
+(9,  '2022', 13, 360, 290, 33,  8, 3, 0),
+(9,  '2023', 14, 400, 310, 36, 10, 4, 1),
+(10, '2022', 13, 290, 230, 25, 11, 2, 0),
+(10, '2023', 14, 320, 250, 28, 13, 3, 0),
+(11, '2022', 12, 310, 260, 28,  8, 2, 0),
+(11, '2023', 14, 360, 290, 32, 10, 3, 1),
+(13, '2022', 14, 240, 200, 20,  9, 2, 0),
+(13, '2023', 14, 270, 215, 23, 11, 2, 0),
+(14, '2022', 13, 430, 340, 40, 16, 3, 1),
+(14, '2023', 14, 470, 360, 44, 18, 4, 1),
+(16, '2022', 12, 280, 240, 25,  6, 2, 0),
+(16, '2023', 14, 320, 270, 28,  8, 3, 0),
+(17, '2022', 13, 200, 170, 18,  7, 1, 0),
+(17, '2023', 14, 230, 190, 20,  9, 2, 0),
+(19, '2022', 12, 300, 255, 27,  7, 2, 0),
+(19, '2023', 13, 330, 275, 30,  9, 3, 0),
+(20, '2022', 13, 260, 210, 22, 10, 2, 0),
+(20, '2023', 14, 290, 230, 25, 12, 2, 0);
+-- ── BOWLING STATS ─────────────────────────────────────────────────────────
+-- (Bowlers + All-Rounders only — pure Batsmen have no bowling rows)
+-- player_id, season, matches, wickets, runs_given, overs, dot_balls
+INSERT INTO bowling_stats (player_id, season, matches, wickets, runs_given, overs, dot_balls) VALUES
+(2,  '2022', 14, 12, 320, 48.0, 120),
+(2,  '2023', 14, 14, 350, 52.0, 135),
+(4,  '2022', 14, 22, 310, 56.0, 190),
+(4,  '2023', 14, 25, 330, 58.0, 210),
+(5,  '2022', 14, 20, 280, 52.0, 175),
+(5,  '2023', 14, 18, 295, 54.0, 165),
+(7,  '2022', 14, 10, 290, 44.0, 110),
+(7,  '2023', 14, 12, 310, 48.0, 125),
+(8,  '2022', 14, 21, 295, 54.0, 185),
+(8,  '2023', 14, 23, 315, 56.0, 200),
+(10, '2022', 13, 11, 305, 46.0, 115),
+(10, '2023', 14, 13, 325, 50.0, 128),
+(12, '2022', 14, 19, 340, 58.0, 160),
+(12, '2023', 14, 21, 355, 60.0, 175),
+(13, '2022', 14,  9, 270, 42.0, 100),
+(13, '2023', 14, 11, 285, 46.0, 112),
+(15, '2022', 14, 24, 285, 56.0, 200),
+(15, '2023', 14, 26, 295, 58.0, 215),
+(17, '2022', 13,  8, 260, 38.0,  95),
+(17, '2023', 14, 10, 275, 42.0, 108),
+(18, '2022', 14, 15, 310, 50.0, 140),
+(18, '2023', 14, 17, 325, 52.0, 155),
+(20, '2022', 13,  9, 280, 42.0, 105),
+(20, '2023', 14, 11, 295, 46.0, 118);
