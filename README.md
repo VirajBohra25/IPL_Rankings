@@ -52,7 +52,7 @@ players ──┬── auction        (price paid, per player per season)
 
 20 players, 2 seasons (2022 and 2023), 40 total auction records.
 
-One small detail I added on purpose — the `season` column uses `ENUM` instead of a plain number. This means the database only accepts specific years (2022, 2023, etc.) and rejects anything else, like a typo or an invalid year, before it even gets saved.
+One small detail I added on purpose — the `season` column uses `ENUM` instead of a plain number. This means the database only accepts specific years (2022, 2023) and rejects anything else, like a typo or an invalid year, before it even gets saved.
 
 ---
 
