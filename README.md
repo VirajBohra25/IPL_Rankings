@@ -2,7 +2,7 @@
 
 This project answers a simple question: when IPL teams spend crores on a player, do they actually get their money's worth?
 
-Teams often pay big money based on reputation or a bidding war, not always based on real performance. So I built a system that scores every player on **value for money** — how much they performed compared to how much they were sold for. I used SQL to do the analysis and built an interactive dashboard in Excel/Google Sheets to explore the results.
+Teams often pay big money based on reputation or a bidding war, not always based on real performance. So I built a system that scores every player on **value for money** — how much they performed compared to how much they were sold for. I used SQL to do the analysis and built a dashboard in Google Sheets to explore the results.
 
 ---
 
@@ -62,7 +62,7 @@ One small detail I added on purpose — the `season` column uses `ENUM` instead 
 Total runs alone doesn't mean much. So I calculated strike rate, batting average, and boundary percentage for batsmen. For bowlers, I calculated economy rate, wickets per match, and dot-ball percentage. All-rounders get both sets.
 
 **Step 2 — Rank each player within their own role.**
-This is the part I had to think about the most. A normal rank (1st, 2nd, 3rd) doesn't work well when group sizes are different — 8 batsmen vs 5 bowlers means their ranks aren't really comparable. So I used a SQL window function called `PERCENT_RANK()`, which converts every player's rank into a number between 0 and 1, no matter how many players are in that group. This way, a batsman ranked 3rd out of 8 and a bowler ranked 3rd out of 5 can be compared fairly later.
+A normal rank (1st, 2nd, 3rd) doesn't work well when group sizes are different — 8 batsmen vs 5 bowlers means their ranks aren't really comparable. So I used a SQL window function called `PERCENT_RANK()`, which converts every player's rank into a number between 0 and 1, no matter how many players are in that group.
 
 ```sql
 PERCENT_RANK() OVER (PARTITION BY season ORDER BY strike_rate)
@@ -94,11 +94,7 @@ So if two players have the same rating but one cost half as much, the cheaper on
 | 2 to 4 | Overpriced |
 | Below 2 | Poor Buy |
 
----
 
-## Why I split the SQL into views
-
-My first attempt at this was one giant query with everything stacked inside it, and it was a nightmare to debug — if something looked wrong, I had no way to tell which part was broken. So I split the logic into three separate views instead: `v_batter_rankings`, `v_bowler_rankings`, and `v_allrounder_rankings`. Each one can be tested on its own. If the final numbers ever look off, I can check each view individually instead of untangling one massive query.
 
 ```sql
 -- Final scoring query (sql/05_final_vfm_scoring.sql)
@@ -129,8 +125,6 @@ JOIN auction a ON ap.player_id = a.player_id AND ap.season = a.season
 ORDER BY season, valueformoney DESC;
 ```
 
-I also used `NULLIF()` in every division in the project. Early on I ran into divide-by-zero errors on a few rows, and adding this guard fixed it — so I kept using it everywhere as good practice.
-
 ---
 
 ## The DASHBOARD Overview
@@ -149,9 +143,6 @@ SQL gives the right numbers, but a dashboard makes those numbers usable for some
 
 <img width="642" height="485" alt="image" src="https://github.com/user-attachments/assets/88c694c9-7dfc-495b-a9e0-1a01c19ae268" />
 
-**A bubble chart** plotting price paid against performance rating, with bubble size showing value. Hovering over any bubble shows a small box with that player's full details — name, price, rating, role, and VFM score. Good value players cluster toward the top-left (high rating, low price), overpriced players cluster toward the bottom-right.
-
-<img width="1852" height="622" alt="bubble_chart_drilldown" src="https://github.com/user-attachments/assets/fb92aeda-feb1-4062-8e76-149add7fb084" />
 
 **A rankings table** showing the full leaderboard for whichever role and season is selected, sorted by rank — similar to how a sports ranking page would look.
 
@@ -170,13 +161,13 @@ On the other side, Marco de Bruyn was bought for ₹9-11 Cr in both seasons but 
 
 ## Tech I used
 
-MySQL · Google Sheets · Window Functions · Views · PivotTables 
+MySQL · Google Sheets · Window Functions 
 
 ---
 
 ## A note on the data
 
-Player names, prices, and stats in this project are made up — I built them to follow realistic IPL patterns without using any real player data. The point of the project was the method, not the specific numbers.
+Player names, prices, and stats in this project are made up — I built them to follow realistic IPL patterns without using any real player data.
 
 ---
 
