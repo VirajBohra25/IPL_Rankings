@@ -31,11 +31,7 @@ IPL-Auction-Value-Auditor/
 │   ├── vfm_ratings.csv
 │   ├── batting_stats.csv
 │   └── bowling_stats.csv
-└── screenshots/
-    ├── dashboard_overview.png
-    ├── bubble_chart_drilldown.png
-    ├── filtered_view_allrounders.png
-    └── player_rankings_table.png
+
 ```
 
 ---
@@ -95,34 +91,8 @@ So if two players have the same rating but one cost half as much, the cheaper on
 | Below 2 | Poor Buy |
 
 
+```
 
-```sql
--- Final scoring query (sql/05_final_vfm_scoring.sql)
-WITH all_players AS (
-    SELECT player_id, player_name, player_role, team, season,
-           batting_ranking AS IPL_RANK, batting_rating AS rating
-    FROM v_batter_rankings
-    UNION
-    SELECT player_id, player_name, player_role, team, season,
-           bowling_rank AS IPL_RANK, bowling_rating AS rating
-    FROM v_bowler_rankings
-    UNION
-    SELECT player_id, player_name, player_role, team, season,
-           allrounder_rank AS IPL_RANK, allrounder_rating AS rating
-    FROM v_allrounder_rankings
-)
-SELECT player_name, player_role, team, season, sold_price_cr, rating,
-       ROUND(rating / sold_price_cr, 2) AS valueformoney,
-       CASE
-           WHEN rating / sold_price_cr >= 8 THEN 'Steal Buy'
-           WHEN rating / sold_price_cr >= 6 THEN 'Good Buy'
-           WHEN rating / sold_price_cr >= 4 THEN 'Fair Buy'
-           WHEN rating / sold_price_cr >= 2 THEN 'Overpriced'
-           ELSE 'Poor Buy'
-       END AS verdict
-FROM all_players ap
-JOIN auction a ON ap.player_id = a.player_id AND ap.season = a.season
-ORDER BY season, valueformoney DESC;
 ```
 
 ---
@@ -130,23 +100,24 @@ ORDER BY season, valueformoney DESC;
 ## The DASHBOARD Overview
 
 SQL gives the right numbers, but a dashboard makes those numbers usable for someone who isn't going to read a query. Here's what it has:
+1) A bar chart depicting Value for money ratings
+2) A table with complete rankings of players
 
-<img width="1847" height="612" alt="dashboard_overview" src="https://github.com/user-attachments/assets/c7be7121-128b-4eb9-a5db-8b38c4167cf9" />
 
+<img width="1215" height="746" alt="image" src="https://github.com/user-attachments/assets/12a5e440-762f-48b0-b1b3-f11a7ac4aa78" />
 
-**Three slicers — Season, Role, and Name.** These are connected, so picking "All-Rounder" in the Role slicer automatically updates the Name slicer to only show all-rounder names. Both charts on the dashboard update at the same time when you change any slicer.
-
-<img width="1852" height="612" alt="filtered_view_allrounders" src="https://github.com/user-attachments/assets/846e6105-489f-48ce-81d0-244f12b1d529" />
 
 
 **A bar chart** ranking players by their value-for-money score according to season(2022 above and 2023 below), highest at the top. Switching the role filter to "Bowler" shows Deepak Nair clearly at the top — which matches the data, since he had the best value-for-money score in the whole dataset, in both seasons.
 
-<img width="642" height="485" alt="image" src="https://github.com/user-attachments/assets/88c694c9-7dfc-495b-a9e0-1a01c19ae268" />
+<img width="1131" height="462" alt="Bar" src="https://github.com/user-attachments/assets/41b4da96-2d03-448b-9744-ce746a0d0ac4" />
+
 
 
 **A rankings table** showing the full leaderboard for whichever role and season is selected, sorted by rank — similar to how a sports ranking page would look.
 
-<img width="1847" height="533" alt="player_rankings_table" src="https://github.com/user-attachments/assets/9724dbde-4d0f-4c63-a10a-93f9d425e5a9" />
+<img width="1836" height="395" alt="Ranking" src="https://github.com/user-attachments/assets/6ccb3e80-af06-4e38-85ae-823e52b12d6d" />
+
 
 
 ---
